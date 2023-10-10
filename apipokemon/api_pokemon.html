@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <!-- Adicione as tags para a fonte do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap" rel="stylesheet">
+  
+  <style>
+      body {
+          background-color: white; /* Cor de fundo branco */
+          background-size: cover;
+          font-family: 'Kanit', sans-serif; /* Usando a fonte Roboto */
+          font-weight: 8000; /* Negrito */
+      }
+
+      .container {
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+          background-image: url('./imagem_backgroundpokemon.jpg'); /* Substitua 'imagem_backgroundpokemon.jpg' pelo caminho da sua imagem de fundo */
+      }
+
+      h1 {
+          text-align: center;
+          color: white; /* Cor do texto branco */
+      }
+
+      .form-group {
+          margin-bottom: 20px;
+      }
+
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          background-size: cover;
+      }
+
+      table, th, td {
+          border: 1px solid #ccc;
+      }
+
+      th, td {
+          padding: 8px;
+          text-align: center; /* Centralizando o texto nas células */
+          color: white; /* Cor do texto branco */
+      }
+
+      /* Definindo o tamanho da Imagem do Pokémon */
+      img {
+          max-width: 200px;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+      }
+
+      input[type="text"] {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+      }
+
+      /* Estilo para tornar o nome do Pokémon em maiúsculo, negrito e com fonte 'Kanit' */
+      td:first-child {
+          font-weight: bold;
+          font-size: 16px; /* Tamanho do nome do Pokémon */
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Drop shadow preto no nome do Pokémon */
+          text-transform: uppercase; /* Transforma o texto em maiúsculo */
+          vertical-align: middle; /* Centraliza verticalmente o nome */
+          color: white; /* Cor para o nome do Pokémon */
+          font-family: 'Kanit', sans-serif; /* Fonte 'Kanit' */
+          font-weight: 8000; /* Negrito */
+      }
+      
+      /* Alterado para h2 */
+      th {
+          font-size: 24px;
+      }
+      
+      /* Alterado para h2 */
+      td:nth-child(2) {
+          font-size: 24px;
+      }
+
+      /* Estilo para o rodapé */
+      footer {
+          text-align: center;
+          background-color: #333;
+          color: white;
+          padding: 10px 0;
+          font-family: 'Kanit', sans-serif; /* Fonte 'Kanit' para o texto de direitos autorais */
+          font-size: 20px
+        }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+      <div>
+          <h1>Lista de Pokémon</h1>
+          <div class="form-group">
+              <input type="text" id="searchInput" class="form-control" placeholder="Pesquisar Pokémon por nome">
+          </div>
+      </div>
+      <table class="table table-bordered">
+          <thead>
+              <tr>
+                  <th>Nome</th>
+                  <th>Imagem</th>
+              </tr>
+          </thead>
+          <tbody id="pokemonList">
+          </tbody>
+      </table>
+  </div>
+
+  <footer>
+      Copyright 2023 FIAP
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script>
+        function loadPokemonList() {
+            axios.get('https://pokeapi.co/api/v2/pokemon?limit=151')
+                .then(response => {
+                    const pokemonList = response.data.results.map(pokemon => {
+                        const pokemonId = pokemon.url.split('/').slice(-2, -1)[0];
+                        const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
+                        return {
+                            name: pokemon.name.toUpperCase(), // Transforma o nome em maiúsculo
+                            image: imageUrl,
+                        };
+                    });
+
+                    const pokemonTable = document.getElementById('pokemonList');
+                    pokemonTable.innerHTML = '';
+
+                    pokemonList.forEach(pokemon => {
+                        const row = document.createElement('tr');
+                        const nameCell = document.createElement('td');
+                        const name = document.createElement('h4'); // Alterado para h2
+                        name.textContent = pokemon.name;
+                        nameCell.appendChild(name);
+                        const imageCell = document.createElement('td');
+                        const image = document.createElement('img');
+                        image.src = pokemon.image;
+                        image.alt = pokemon.name;
+                        image.style.width = '200px'; // Definindo o tamanho em pixels.
+                        imageCell.appendChild(image);
+                        row.appendChild(nameCell);
+                        row.appendChild(imageCell);
+
+                        pokemonTable.appendChild(row);
+                    });
+                });
+        }
+
+        loadPokemonList();
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function () {
+            const searchTerm = searchInput.value.toLowerCase();
+            const rows = document.querySelectorAll('#pokemonList tr');
+
+            rows.forEach(row => {
+                const nameCell = row.querySelector('td:first-child');
+                const name = nameCell.textContent.toLowerCase();
+
+                if (name.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+  </body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
