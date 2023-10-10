@@ -1,6 +1,8 @@
 # cpoptimizationtech_apipokemon
-Check Point api Pokemon de consulta;
+Check Point api Pokemon de consulta
+
 Grupo do CheckPoint
+
 André Spinelli Cintra RM 551016
 Augusto de Oliveira Laurino RM 93498
 Caio Felipe Britto Zanardo da Silva RM 95125
